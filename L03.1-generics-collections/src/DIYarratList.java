@@ -1,18 +1,15 @@
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class DIYarratList<T> implements List<T> {
     private T[] values;
 
-    DIYarratList(){
-        values = (T[])new Object();
+    DIYarratList() {
+        values = (T[]) new Object[0];
     }
 
     @Override
     public int size() {
-        return 0;
+        return values.length;
     }
 
     @Override
@@ -42,12 +39,21 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
+        try {
+            T[] temp = values;
+            values = (T[]) new Object[temp.length + 1];
+            System.arraycopy(temp, 0, values, 0, temp.length);
+            values[values.length - 1] = t;
+            return true;
+        } catch (ClassCastException ex) {
+            ex.printStackTrace();
+        }
         return false;
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        return remove(indexOf(o)) != null;
     }
 
     @Override
@@ -77,17 +83,17 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public void clear() {
-
+        Arrays.fill(values, values.length);
     }
 
     @Override
     public T get(int index) {
-        return null;
+        return values[index];
     }
 
     @Override
     public T set(int index, T element) {
-        return null;
+        return values[index] = element;
     }
 
     @Override
@@ -97,12 +103,28 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        return null;
+        T o = values[index];
+        try {
+            T[] temp = values;
+            values = (T[]) new Object[temp.length - 1];
+            System.arraycopy(temp, 0, values, 0, index);
+            int amountElemAfterIndex = temp.length - index--;
+            System.arraycopy(temp, index + 1, values, index, amountElemAfterIndex);
+        } catch (ClassCastException ex) {
+            ex.printStackTrace();
+        }
+        return o;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        int index = 0;
+        for (Object searcher : values) {
+            index++;
+            if (searcher.equals(o))
+                break;
+        }
+        return index;
     }
 
     @Override
@@ -112,16 +134,16 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public ListIterator<T> listIterator() {
-        return null;
+        return listIterator(0);
     }
 
     @Override
     public ListIterator<T> listIterator(int index) {
-        return null;
+        return new ArrayIterator<>(index, values);
     }
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        return null;
+        return Arrays.asList(Arrays.copyOfRange(values, fromIndex, toIndex));
     }
 }
