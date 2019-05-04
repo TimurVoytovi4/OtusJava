@@ -2,9 +2,16 @@ import java.util.*;
 
 public class DIYarratList<T> implements List<T> {
     private T[] values;
+    private static final int DEFAULT = 0;
+
+    DIYarratList(int initialCapacity) {
+        if (initialCapacity > 0) {
+            values = (T[]) new Object[initialCapacity];
+        }
+    }
 
     DIYarratList() {
-        values = (T[]) new Object[0];
+        values = (T[]) new Object[DEFAULT];
     }
 
     @Override
@@ -24,12 +31,12 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new DIYIterator();
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return Arrays.copyOf(values, values.length);
     }
 
     @Override
@@ -134,16 +141,78 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public ListIterator<T> listIterator() {
-        return listIterator(0);
+        return new DiyListIterator(0);
     }
 
     @Override
     public ListIterator<T> listIterator(int index) {
-        return new ArrayIterator<>(index, values);
+        return new DiyListIterator(index);
     }
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         return Arrays.asList(Arrays.copyOfRange(values, fromIndex, toIndex));
+    }
+
+    class DIYIterator implements Iterator<T> {
+        int cursor;
+        int previousRet = -1;
+
+        @Override
+        public boolean hasNext() {
+            return cursor != values.length;
+        }
+
+        @Override
+        public T next() {
+            int i = cursor;
+            cursor = i + 1;
+            return values[previousRet = i];
+        }
+    }
+
+    class DiyListIterator extends DIYIterator implements ListIterator<T> {
+        DiyListIterator(int index) {
+            super();
+            cursor = index;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursor != 0;
+        }
+
+        @Override
+        public T previous() {
+            if (previousRet >= 0) {
+                return values[previousRet];
+            }
+            return null;
+        }
+
+        @Override
+        public int nextIndex() {
+            return cursor;
+        }
+
+        @Override
+        public int previousIndex() {
+            return cursor - 1;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void set(T t) {
+            DIYarratList.this.set(previousRet, t);
+        }
+
+        @Override
+        public void add(T t) {
+            throw new UnsupportedOperationException();
+        }
     }
 }
