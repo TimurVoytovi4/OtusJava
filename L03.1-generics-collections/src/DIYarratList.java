@@ -2,7 +2,8 @@ import java.util.*;
 
 public class DIYarratList<T> implements List<T> {
     private T[] values;
-    private static final int DEFAULT = 0;
+    private static final int DEFAULT_CAPACITY_EMPTY = 0;
+    private int size = DEFAULT_CAPACITY_EMPTY;
 
     DIYarratList(int initialCapacity) {
         if (initialCapacity > 0) {
@@ -11,22 +12,22 @@ public class DIYarratList<T> implements List<T> {
     }
 
     DIYarratList() {
-        values = (T[]) new Object[DEFAULT];
+        values = (T[]) new Object[DEFAULT_CAPACITY_EMPTY];
     }
 
     @Override
     public int size() {
-        return values.length;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        throw new UnsupportedOperationException("DIYarratList.isEmpty()");
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        throw new UnsupportedOperationException("DIYarratList.contains(Object o)");
     }
 
     @Override
@@ -36,21 +37,24 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public Object[] toArray() {
-        return Arrays.copyOf(values, values.length);
+        return Arrays.copyOf(values, size);
     }
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        return null;
+        throw new UnsupportedOperationException("DIYarratList.toArray(T1[] a)");
     }
 
     @Override
     public boolean add(T t) {
         try {
-            T[] temp = values;
-            values = (T[]) new Object[temp.length + 1];
-            System.arraycopy(temp, 0, values, 0, temp.length);
-            values[values.length - 1] = t;
+            if (size + 1 >= values.length) {
+                T[] temp = values;
+                values = (T[]) new Object[(temp.length * 3) / 2 + 1];
+                System.arraycopy(temp, 0, values, 0, temp.length);
+            }
+            values[size] = t;
+            size++;
             return true;
         } catch (ClassCastException ex) {
             ex.printStackTrace();
@@ -65,51 +69,54 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        throw new UnsupportedOperationException("DIYarratList.containsAll(Collection<?> c)");
     }
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        return false;
+        throw new UnsupportedOperationException("DIYarratList.addAll(Collection<? extends T> c)");
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
-        return false;
+        throw new UnsupportedOperationException("DIYarratList.addAll(int index, Collection<? extends T> c)");
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        throw new UnsupportedOperationException("DIYarratList.removeAll(Collection<?> c)");
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        throw new UnsupportedOperationException("DIYarratList.retainAll(Collection<?> c)");
     }
 
     @Override
     public void clear() {
-        Arrays.fill(values, values.length);
+        Arrays.fill(values, size);
     }
 
     @Override
     public T get(int index) {
+        checkValue(index);
         return values[index];
     }
 
     @Override
     public T set(int index, T element) {
+        checkValue(index);
         return values[index] = element;
     }
 
     @Override
     public void add(int index, T element) {
-
+        throw new UnsupportedOperationException("DIYarratList.add()");
     }
 
     @Override
     public T remove(int index) {
+        checkValue(index);
         T o = values[index];
         try {
             T[] temp = values;
@@ -117,6 +124,7 @@ public class DIYarratList<T> implements List<T> {
             System.arraycopy(temp, 0, values, 0, index);
             int amountElemAfterIndex = temp.length - index--;
             System.arraycopy(temp, index + 1, values, index, amountElemAfterIndex);
+            size--;
         } catch (ClassCastException ex) {
             ex.printStackTrace();
         }
@@ -126,9 +134,9 @@ public class DIYarratList<T> implements List<T> {
     @Override
     public int indexOf(Object o) {
         int index = 0;
-        for (Object searcher : values) {
+        for (Object currentElem : values) {
             index++;
-            if (searcher.equals(o))
+            if (currentElem.equals(o))
                 break;
         }
         return index;
@@ -136,7 +144,7 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        throw new UnsupportedOperationException("lastIndexOf(Object o)");
     }
 
     @Override
@@ -146,6 +154,7 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public ListIterator<T> listIterator(int index) {
+        checkValue(index);
         return new DiyListIterator(index);
     }
 
@@ -154,18 +163,25 @@ public class DIYarratList<T> implements List<T> {
         return Arrays.asList(Arrays.copyOfRange(values, fromIndex, toIndex));
     }
 
+    private void checkValue(int index) {
+        if (index > size || index < 0)
+            throw new IllegalArgumentException("Incorrect value");
+    }
+
     class DIYIterator implements Iterator<T> {
         int cursor;
         int previousRet = -1;
 
         @Override
         public boolean hasNext() {
-            return cursor != values.length;
+            return cursor != size;
         }
 
         @Override
         public T next() {
             int i = cursor;
+            if (i >= size)
+                throw new NoSuchElementException();
             cursor = i + 1;
             return values[previousRet = i];
         }
@@ -174,6 +190,7 @@ public class DIYarratList<T> implements List<T> {
     class DiyListIterator extends DIYIterator implements ListIterator<T> {
         DiyListIterator(int index) {
             super();
+            checkValue(index);
             cursor = index;
         }
 
@@ -202,7 +219,7 @@ public class DIYarratList<T> implements List<T> {
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("DiyListIterator.remove()");
         }
 
         @Override
@@ -212,7 +229,7 @@ public class DIYarratList<T> implements List<T> {
 
         @Override
         public void add(T t) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("DiyListIterator.add()");
         }
     }
 }
