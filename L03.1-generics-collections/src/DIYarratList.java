@@ -185,6 +185,11 @@ public class DIYarratList<T> implements List<T> {
             cursor = i + 1;
             return values[previousRet = i];
         }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("DIYIterator.remove()");
+        }
     }
 
     class DiyListIterator extends DIYIterator implements ListIterator<T> {
@@ -215,11 +220,6 @@ public class DIYarratList<T> implements List<T> {
         @Override
         public int previousIndex() {
             return cursor - 1;
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("DiyListIterator.remove()");
         }
 
         @Override
