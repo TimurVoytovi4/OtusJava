@@ -3,23 +3,24 @@ package ru.otus.homework2;
 import java.util.*;
 
 public class DIYarratList<T> implements List<T> {
-    private T[] values;
+    private Object[] values;
     private static final int DEFAULT_CAPACITY_EMPTY = 0;
     private int size = DEFAULT_CAPACITY_EMPTY;
 
     DIYarratList(int initialCapacity) {
         if (initialCapacity > 0) {
-            values = (T[]) new Object[initialCapacity];
+            values = new Object[initialCapacity];
         }
     }
 
     DIYarratList() {
-        values = (T[]) new Object[DEFAULT_CAPACITY_EMPTY];
+        values = new Object[DEFAULT_CAPACITY_EMPTY];
     }
 
     private Object[] grow() {
         return new Object[(values.length * 3) / 2 + 1];
     }
+
     @Override
     public int size() {
         return size;
@@ -54,8 +55,8 @@ public class DIYarratList<T> implements List<T> {
     public boolean add(T t) {
         try {
             if (size + 1 >= values.length) {
-                T[] temp = values;
-                values = (T[]) grow();
+                Object[] temp = values;
+                values = grow();
                 System.arraycopy(temp, 0, values, 0, temp.length);
             }
             values[size] = t;
@@ -105,13 +106,15 @@ public class DIYarratList<T> implements List<T> {
     @Override
     public T get(int index) {
         checkValue(index);
-        return values[index];
+        @SuppressWarnings("unchecked") T elem = (T) values[index];
+        return elem;
     }
 
     @Override
     public T set(int index, T element) {
         checkValue(index);
-        return values[index] = element;
+        @SuppressWarnings("unchecked") T elem = (T) values[index];
+        return elem;
     }
 
     @Override
@@ -122,10 +125,10 @@ public class DIYarratList<T> implements List<T> {
     @Override
     public T remove(int index) {
         checkValue(index);
-        T o = values[index];
+        @SuppressWarnings("unchecked") T o = (T) values[index];
         try {
-            T[] temp = values;
-            values = (T[]) new Object[temp.length - 1];
+            Object[] temp = values;
+            values = new Object[temp.length - 1];
             System.arraycopy(temp, 0, values, 0, index);
             int amountElemAfterIndex = temp.length - index--;
             System.arraycopy(temp, index + 1, values, index, amountElemAfterIndex);
@@ -165,7 +168,8 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        return Arrays.asList(Arrays.copyOfRange(values, fromIndex, toIndex));
+        @SuppressWarnings("unchecked") List<T> res = (List<T>) Arrays.asList(Arrays.copyOfRange(values, fromIndex, toIndex));
+        return res;
     }
 
     private void checkValue(int index) {
@@ -188,7 +192,8 @@ public class DIYarratList<T> implements List<T> {
             if (i >= size)
                 throw new NoSuchElementException();
             cursor = i + 1;
-            return values[previousRet = i];
+            @SuppressWarnings("unchecked") T res = (T) values[previousRet = i];
+            return res;
         }
 
         @Override
@@ -212,7 +217,8 @@ public class DIYarratList<T> implements List<T> {
         @Override
         public T previous() {
             if (previousRet >= 0) {
-                return values[previousRet];
+                @SuppressWarnings("unchecked") T res = (T) values[previousRet];
+                return res;
             }
             return null;
         }
