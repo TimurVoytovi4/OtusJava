@@ -4,11 +4,11 @@ class TestDIY {
     public static void main(String[] args) {
         String testWord = "Test";
         DIYarratList<String> diYarrayList = new DIYarratList<>();
-        diYarrayList.add(testWord+"965");
-        diYarrayList.add(testWord+"965");
+        diYarrayList.add(testWord + "965");
+        diYarrayList.add(testWord + "965");
         DIYarratList<String> diYarrayList2 = new DIYarratList<>();
-        diYarrayList2.add(testWord+"698");
-        diYarrayList2.add(testWord+"698");
+        diYarrayList2.add(testWord + "698");
+        diYarrayList2.add(testWord + "698");
         Collections.copy(diYarrayList2, diYarrayList);
         for (int i = 0; i < 21; i++) {
             diYarrayList.add(testWord + i);

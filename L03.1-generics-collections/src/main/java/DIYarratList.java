@@ -15,6 +15,9 @@ public class DIYarratList<T> implements List<T> {
         values = (T[]) new Object[DEFAULT_CAPACITY_EMPTY];
     }
 
+    private Object[] grow() {
+        return new Object[(values.length * 3) / 2 + 1];
+    }
     @Override
     public int size() {
         return size;
@@ -22,12 +25,12 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("DIYarratList.isEmpty()");
+        throw new UnsupportedOperationException("main.java.DIYarratList.isEmpty()");
     }
 
     @Override
     public boolean contains(Object o) {
-        throw new UnsupportedOperationException("DIYarratList.contains(Object o)");
+        throw new UnsupportedOperationException("main.java.DIYarratList.contains(Object o)");
     }
 
     @Override
@@ -42,7 +45,7 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        throw new UnsupportedOperationException("DIYarratList.toArray(T1[] a)");
+        throw new UnsupportedOperationException("main.java.DIYarratList.toArray(T1[] a)");
     }
 
     @Override
@@ -50,7 +53,7 @@ public class DIYarratList<T> implements List<T> {
         try {
             if (size + 1 >= values.length) {
                 T[] temp = values;
-                values = (T[]) new Object[(temp.length * 3) / 2 + 1];
+                values = (T[]) grow();
                 System.arraycopy(temp, 0, values, 0, temp.length);
             }
             values[size] = t;
@@ -69,27 +72,27 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        throw new UnsupportedOperationException("DIYarratList.containsAll(Collection<?> c)");
+        throw new UnsupportedOperationException("main.java.DIYarratList.containsAll(Collection<?> c)");
     }
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        throw new UnsupportedOperationException("DIYarratList.addAll(Collection<? extends T> c)");
+        throw new UnsupportedOperationException("main.java.DIYarratList.addAll(Collection<? extends T> c)");
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
-        throw new UnsupportedOperationException("DIYarratList.addAll(int index, Collection<? extends T> c)");
+        throw new UnsupportedOperationException("main.java.DIYarratList.addAll(int index, Collection<? extends T> c)");
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException("DIYarratList.removeAll(Collection<?> c)");
+        throw new UnsupportedOperationException("main.java.DIYarratList.removeAll(Collection<?> c)");
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        throw new UnsupportedOperationException("DIYarratList.retainAll(Collection<?> c)");
+        throw new UnsupportedOperationException("main.java.DIYarratList.retainAll(Collection<?> c)");
     }
 
     @Override
@@ -111,7 +114,7 @@ public class DIYarratList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
-        throw new UnsupportedOperationException("DIYarratList.add()");
+        throw new UnsupportedOperationException("main.java.DIYarratList.add()");
     }
 
     @Override
