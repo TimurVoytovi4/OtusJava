@@ -1,3 +1,5 @@
+package ru.otus.homework2;
+
 import java.util.Collections;
 
 class TestDIY {
