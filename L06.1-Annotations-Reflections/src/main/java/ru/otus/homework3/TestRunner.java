@@ -2,118 +2,84 @@ package ru.otus.homework3;
 
 import ru.otus.homework3.Annotations.After;
 import ru.otus.homework3.Annotations.Before;
-import ru.otus.homework3.Annotations.MockClass;
 import ru.otus.homework3.Annotations.Test;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import static java.lang.System.*;
+import java.util.Objects;
 
 class TestRunner {
-    private static boolean statusTest = false;
-    private static boolean notAssert = true;
+    private Class clazz;
+
+    TestRunner(Class clazz) {
+        this.clazz = clazz;
+    }
 
     private int passed = 0;
     private int failed = 0;
-    private int error = 0;
-    private boolean ok = true;
 
-    private double time = 0;
+    void run() {
+        try {
+            FileWriter testWriter = new FileWriter(clazz.getName() + "_log.txt", false);
 
-    void run(Class<?> clazz){
-        for (Method method : clazz.getMethods()) {
-            if (method.isAnnotationPresent(Before.class)) {
-                out.println("BEFORE");
-            } else if (method.isAnnotationPresent(Test.class)) {
-                Test annotation = method.getAnnotation(Test.class);
-                try {
-                    time = nanoTime();
-                    method.invoke(clazz.getDeclaredConstructor().newInstance());
-                    double newTime = nanoTime() - time;
-                    time = newTime / 1000000;
-                    if (!annotation.expected().equals(MockClass.class)) {
-                        out.println("\r\nFor the method (" + method.getName() + ") does not meet the exception -> " + annotation.expected());
-                    } else {
-                        out.println("\r\nMETHOD " + method.getName() + "()");
-                        out.println("\r\nRun-time: " + time + " ms");
-                        if (statusTest) {
+            testWriter.write("* " + clazz.getName() + " * " +  ":\n\n");
+
+            Method[] methods = clazz.getMethods();
+
+            Method before = TestRunner.class.getDeclaredMethod("nothing");
+            Method after = TestRunner.class.getDeclaredMethod("nothing");
+            for (Method method : methods) {
+                if (method.isAnnotationPresent(Before.class)) {
+                    before = method;
+                }
+                if (method.isAnnotationPresent(After.class)) {
+                    after = method;
+                }
+            }
+            for (Method method : methods) {
+                if (method.isAnnotationPresent(Test.class)) {
+                    Test test = method.getAnnotation(Test.class);
+                    try {
+                        before.invoke(before.getDeclaringClass().getConstructor().newInstance());
+                        method.invoke(method.getDeclaringClass().getConstructor().newInstance());
+                        passed++;
+                        callAfter(Objects.requireNonNull(after));
+                    } catch (InvocationTargetException e) {
+                        Throwable exc = e.getTargetException();
+                        if (exc.getClass().equals(test.expected())) {
                             passed++;
-                            if (!notAssert) {
-                                out.print("\r\nTest: PASSED\r\n");
-                                notAssert = true;
-                            }
-                            statusTest = false;
-                        } else {
-                            failed++;
-                            if (!notAssert) {
-                                out.println("\r\nTest: FAILED\r\n");
-                                notAssert = true;
-                            }
+                            callAfter(Objects.requireNonNull(after));
+                            continue;
                         }
-                    }
-                } catch (Throwable e) {
-                    if (annotation.expected().equals(e.getCause().getClass())) {
-                        out.println("\r\nMETHOD " + method.getName() + "()");
-                        out.println("\r\nRun-time: " + time + " ms");
-                        if (statusTest) {
-                            passed++;
-                            out.print("\r\nTest: PASSED\r\n");
-                        } else {
-                            failed++;
-                            out.println("\r\nTest: FAILED\r\n");
-                            statusTest = false;
-                        }
-
-                    } else {
-                        out.print("\r\nIn test " + method.getName() + "()" + " Error: " + e.getCause());
-//                        err.printf("\r\nIn test " + method.getName() + "()" + " Error: " + e.getCause());
-                        error++;
-                        ok = false;
+                        failed++;
+                        testWriter.write("- Test " + method.getName() + ": " + exc.getMessage());
+                    } catch (IllegalAccessException | IllegalArgumentException | InstantiationException e) {
+                        failed++;
+                        testWriter.write("- Test " + method.getName() + ": " + e.getMessage());
                     }
                 }
-            } else if (method.isAnnotationPresent(After.class)) {
-                out.println("After");
             }
-        }
-        out.print("\r\n------------------------------");
-        out.print("\r\nPassed: " + passed + " Failed " + failed + " Error " + error);
-        out.println("\r\nThe test is completed: " + (ok ? "OK" : "Failed"));
-    }
+            testWriter.write("\n\nTotal: " + (failed + passed) + "\n" +
+                    "- Passed: " + passed + "\n" +
+                    "- Failed: " + failed + "\n");
 
-
-    static boolean myAssertEquals(Object obj1, Object obj2){
-        boolean result = obj1.equals(obj2);
-        if(result){
-            statusTest = true;
+            testWriter.flush();
+        } catch (IOException | NoSuchMethodException e) {
+            System.out.println("Lost access to the file");
         }
-        notAssert = false;
-        return result;
     }
-
-    static boolean myAssertEquals(int a, int b){
-        boolean result = a==b;
-        if(result){
-            statusTest = true;
+    private void callAfter(Method after)
+    {
+        try
+        {
+            after.invoke(after.getDeclaringClass().getConstructor().newInstance());
         }
-        notAssert = false;
-        return result;
-    }
-
-    public static boolean myAssertEquals(boolean result, boolean to){
-        boolean resultTo = result==to;
-        if(result){
-            statusTest = true;
+        catch(InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException e)
+        {
+            System.out.println("Invalid after method");
         }
-        notAssert = false;
-        return resultTo;
     }
-
-    public static boolean myAssertEquals(String st1, String st2){
-        boolean result = st1.equals(st2);
-        if(result){
-            statusTest = true;
-        }
-        notAssert = false;
-        return result;
-    }
+    private void nothing(){}
 }

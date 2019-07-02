@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Test {
-    Class<? extends Throwable> expected() default MockClass.class;
+    Class<? extends Throwable> expected() default ExpectedException.class;
 }
