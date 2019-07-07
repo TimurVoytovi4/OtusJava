@@ -1,9 +1,11 @@
-package ru.otus.homework3;
+package ru.otus.homework3.Test;
 
 
 import ru.otus.homework3.Annotations.After;
 import ru.otus.homework3.Annotations.Before;
 import ru.otus.homework3.Annotations.Test;
+import ru.otus.homework3.TestFramework.Assert;
+import ru.otus.homework3.Calculator;
 
 public class CalculatorTest {
     private static Calculator calculator;

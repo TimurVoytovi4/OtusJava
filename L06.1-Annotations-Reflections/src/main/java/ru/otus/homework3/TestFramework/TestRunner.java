@@ -1,27 +1,27 @@
-package ru.otus.homework3;
+package ru.otus.homework3.TestFramework;
 
 import ru.otus.homework3.Annotations.After;
 import ru.otus.homework3.Annotations.Before;
 import ru.otus.homework3.Annotations.Test;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-class TestRunner {
+public class TestRunner {
     private Class clazz;
 
-    TestRunner(Class clazz) {
+    public TestRunner(Class clazz) {
         this.clazz = clazz;
     }
 
     private int passed = 0;
     private int failed = 0;
-
-    void run() {
-        try (FileWriter logWriter = new FileWriter("L06.1-Annotations-Reflections/src/main/log/"
+    public void run() {
+        try (FileWriter logWriter = new FileWriter("L06.1-Annotations-Reflections/src/main/"
                 + clazz.getSimpleName() + "_log.txt", false)) {
 
             logWriter.write("* " + clazz.getName() + " * " + ":\n\n");
