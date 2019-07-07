@@ -9,6 +9,7 @@
     <version>2019-03-SNAPSHOT</version>
     <modules>
         <module>L01.1-maven</module>
+        <module>L03.1-generics-collections</module>
     </modules>
 
     <properties>
