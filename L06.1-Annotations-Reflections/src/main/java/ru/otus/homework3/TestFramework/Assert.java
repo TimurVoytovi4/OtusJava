@@ -1,9 +1,9 @@
-package ru.otus.homework3;
+package ru.otus.homework3.TestFramework;
 
 public class Assert extends RuntimeException {
     private String aCause;
 
-    Assert(String cause) {
+    private Assert(String cause) {
         aCause = cause;
     }
 
@@ -28,12 +28,12 @@ public class Assert extends RuntimeException {
     }
 
     public static void assertNull(Object object) {
-        if (object != null)
-            throw new Assert("Object is not null. ");
+        if (object == null)
+            throw new Assert("Object is null. ");
     }
 
     public static void assertNotNull(Object object) {
-        if (object == null)
+        if (object != null)
             throw new Assert("Object is not null. ");
     }
 
