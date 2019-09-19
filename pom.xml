@@ -11,6 +11,7 @@
         <module>L01.1-maven</module>
         <module>L03.1-generics-collections</module>
         <module>L06.1-Annotations-Reflections</module>
+        <module>L08.1-byteCodes</module>
     </modules>
 
     <properties>
