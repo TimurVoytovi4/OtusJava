@@ -26,3 +26,4 @@ target/
 test
 .idea/
 *.iml
+logs/
