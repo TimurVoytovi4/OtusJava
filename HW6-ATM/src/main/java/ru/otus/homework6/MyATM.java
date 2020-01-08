@@ -2,8 +2,10 @@ package ru.otus.homework6;
 
 import java.util.*;
 
+
 public class MyATM implements ATM {
     private Map<Nominal, Integer> storage;
+    UtilProcessor pr = new UtilProcessor();
 
     public MyATM() {
         storage = new HashMap<>();
@@ -11,39 +13,18 @@ public class MyATM implements ATM {
 
     @Override
     public void set(int cash) {
-        for (var var : recognizer(cash))
-            storage.put(findNominal(var), cash);
-        //TODO save() -> Проверка на корректность сохранения. Что если купюру не распознали
-    }
-
-    private List<Integer> recognizer(int cash) {
-        /*
-        List<Integer> result = new ArrayList<>();
-        int a = cash % 50;
-        int b = cash % 100;
-        int c = cash % 200;
-        int d = cash % 500;
-        if (d != 0) {
-            for (int f = 0; f < d; f++) {
-                result.add(500);
-            }if (cash)
+        if (cash != 0) {
+            Nominal nominal = pr.findNominal(cash);
+            if (nominal != null)
+                storage.put(nominal, cash);
+            else throw new IllegalArgumentException("Банкомат не может принять данную купюру.");
         }
-        */
-        return null;
-    }
-
-    private Nominal findNominal(int cash) {
-        for (Nominal var : Nominal.values()) {
-            if (String.valueOf(cash).equals(var.getTitle())) {
-                return var;
-            }
-        }
-        return null;
     }
 
     @Override
     public List<Integer> get(int cash) {
-        return recognizer(cash);
+        pr.recognize(cash);
+        return pr.outFilledCash(storage, pr.outList);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class ProgramInterfaceAtm {
             System.out.println("Вы получите средства следуюшими купюрами: " + prostoBank.get(sc.nextInt()));
             begin();
         } else if (i == 2) {
-            System.out.println("Укажите сумму: ");
+            System.out.println("Внесите купюру(принимаются номиналы:500, 200, 100, 50): ");
             prostoBank.set(sc.nextInt());
             begin();
         } else if (i == 3) {
