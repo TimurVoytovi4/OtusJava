@@ -2,33 +2,26 @@ package ru.otus.homework6;
 
 import java.util.*;
 
-
 public class MyATM implements ATM {
-    private Map<Nominal, Integer> storage;
-    UtilProcessor pr = new UtilProcessor();
+    private Map<Nominal, List<Integer>> storage;
+    AtmProcessor pr = new AtmProcessor();
 
     public MyATM() {
-        storage = new HashMap<>();
+        this.storage = pr.init();
     }
 
     @Override
     public void set(int cash) {
-        if (cash != 0) {
-            Nominal nominal = pr.findNominal(cash);
-            if (nominal != null)
-                storage.put(nominal, cash);
-            else throw new IllegalArgumentException("Банкомат не может принять данную купюру.");
-        }
+        pr.storeCash(storage, cash);
     }
 
     @Override
     public List<Integer> get(int cash) {
-        pr.recognize(cash);
-        return pr.outFilledCash(storage, pr.outList);
+        return pr.giveOutCash(storage, cash);
     }
 
     @Override
     public int size() {
-        return storage.values().stream().mapToInt(i -> i).sum();
+        return storage.values().stream().flatMap(Collection::stream).mapToInt(elem -> elem).sum();
     }
 }
