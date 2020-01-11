@@ -1,10 +1,11 @@
 package ru.otus.homework6;
 
 import ru.otus.homework6.Exceptions.AtmException;
+import ru.otus.homework6.Exceptions.NotRecognized;
 
 import java.util.Scanner;
 
-public class ProgramInterfaceAtm {
+public class AtmUserInterface {
     ATM prostoBank = new MyATM();
     Scanner sc = new Scanner(System.in);
 
@@ -24,8 +25,12 @@ public class ProgramInterfaceAtm {
             }
             begin();
         } else if (i == 2) {
-            System.out.println("Внесите купюру(принимаются номиналы:500, 200, 100, 50): ");
-            prostoBank.set(sc.nextInt());
+            try {
+                System.out.println("Внесите купюру(принимаются номиналы:500, 200, 100, 50): ");
+                prostoBank.set(sc.nextInt());
+            } catch (NotRecognized e) {
+                System.out.println(e.getMessage());
+            }
             begin();
         } else if (i == 3) {
             System.out.println("Баланс составляет: " + prostoBank.size());

@@ -3,25 +3,33 @@ package ru.otus.homework6;
 import java.util.*;
 
 public class MyATM implements ATM {
-    private Map<Nominal, List<Integer>> storage;
     AtmProcessor pr = new AtmProcessor();
 
     public MyATM() {
-        this.storage = pr.init();
+        List<Nominal> fiveHundredsCell = new ArrayList<>();
+        List<Nominal> twoHundredsCell = new ArrayList<>();
+        List<Nominal> oneHundredsCell = new ArrayList<>();
+        List<Nominal> fiftiesCell = new ArrayList<>();
+        pr.init(Arrays.asList(fiveHundredsCell,
+                twoHundredsCell,
+                oneHundredsCell,
+                fiftiesCell));
     }
 
     @Override
     public void set(int cash) {
-        pr.storeCash(storage, cash);
+        pr.storeCash(cash);
     }
 
     @Override
     public List<Integer> get(int cash) {
-        return pr.giveOutCash(storage, cash);
+        List<Integer> returnCash = new ArrayList<>(pr.giveCash(cash));
+        pr.outCash.clear();
+        return returnCash;
     }
 
     @Override
     public int size() {
-        return storage.values().stream().flatMap(Collection::stream).mapToInt(elem -> elem).sum();
+        return pr.size();
     }
 }

@@ -1,18 +1,18 @@
 package ru.otus.homework6;
 
 public enum Nominal {
-    FIFTY("50"),
-    ONE_HUNDRED("100"),
-    TWO_HUNDRED("200"),
-    FIVE_HUNDRED("500");
+    FIVE_HUNDRED(500),
+    TWO_HUNDRED(200),
+    ONE_HUNDRED(100),
+    FIFTY(50);
 
-    private final String title;
+    private final int title;
 
-    Nominal(String title) {
+    Nominal(int title) {
         this.title = title;
     }
 
-    public String getTitle() {
+    public int getTitle() {
         return title;
     }
 }
