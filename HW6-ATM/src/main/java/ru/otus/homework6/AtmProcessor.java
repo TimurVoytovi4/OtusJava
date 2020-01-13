@@ -6,8 +6,8 @@ import java.util.*;
 
 class AtmProcessor {
 
+    private final AtmUtil atmUtil = new AtmUtil();
     private Nominal nominal;
-    private AtmUtil util = new AtmUtil();
     private Map<Nominal, List<Nominal>> storage;
 
     List<Integer> outCash = new ArrayList<>();
@@ -19,24 +19,18 @@ class AtmProcessor {
 
     void storeCash(int cash) {
         if (check(cash)) {
-            storage.get(nominal).add(findNominal(cash));
+            storage.get(nominal).add(atmUtil.findNominal(cash));
         } else throw new NotRecognized(cash);
     }
 
     private boolean check(int cash) {
-        nominal = findNominal(cash);
+        nominal = atmUtil.findNominal(cash);
         return nominal != null;
     }
 
-    private Nominal findNominal(int cash) {
-        return Arrays.stream(Nominal.values()).filter(var -> cash == var.getTitle()).findFirst().orElse(null);
-    }
-
     List<Integer> giveCash(int cash) {
-        if (!check(cash)) {
-            util.recognize(cash).forEach(this::giveCash);
-        } else if (storage.get(findNominal(cash)).isEmpty()) {
-            util.divide(cash).forEach(this::giveCash);
+        if (!check(cash) || storage.get(atmUtil.findNominal(cash)).isEmpty()) {
+            atmUtil.divide(cash).forEach(this::giveCash);
         } else {
             outCash.add(cash);
             storage.get(nominal).remove(nominal);
