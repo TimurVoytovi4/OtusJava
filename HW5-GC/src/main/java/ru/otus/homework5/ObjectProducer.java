@@ -13,11 +13,9 @@ public class ObjectProducer {
         this.counter = counter;
     }
 
-    List<Object> objects = new LinkedList<>();
-
     public void run() {
+        List<Object> objects = new LinkedList<>();
         for (int i = 0; i < counter; i++) {
-
             gcReport();
             objects.add(new byte[10 * 1024 * 1024]);
             if (collectionTime <= 120000000)
