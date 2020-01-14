@@ -5,8 +5,8 @@ import ru.otus.homework6.Exceptions.NotRecognized;
 
 import java.util.Scanner;
 
-public class AtmUserInterface {
-    ATM prostoBank = new MyATM();
+public class Controller {
+    ATM myATM = new MyATM();
     Scanner sc = new Scanner(System.in);
 
     void begin() {
@@ -19,7 +19,7 @@ public class AtmUserInterface {
         if (i == 1) {
             System.out.println("Укажите сумму: ");
             try {
-                System.out.println("Вы получите средства следуюшими купюрами: " + prostoBank.get(sc.nextInt()));
+                System.out.println("Вы получите средства следуюшими купюрами: " + myATM.get(sc.nextInt()));
             } catch (AtmException e) {
                 System.out.println(e.getMessage());
             }
@@ -27,13 +27,13 @@ public class AtmUserInterface {
         } else if (i == 2) {
             try {
                 System.out.println("Внесите купюру(принимаются номиналы:500, 200, 100, 50): ");
-                prostoBank.set(sc.nextInt());
+                myATM.set(sc.nextInt());
             } catch (NotRecognized e) {
                 System.out.println(e.getMessage());
             }
             begin();
         } else if (i == 3) {
-            System.out.println("Баланс составляет: " + prostoBank.size());
+            System.out.println("Баланс составляет: " + myATM.size());
             begin();
         } else if (i == 4) {
             System.out.println("Всего хорошего :)");

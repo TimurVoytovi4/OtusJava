@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AtmUtil {
-    public AtmUtil() {
+class AtmUtil {
+    AtmUtil() {
     }
 
     Nominal findNominal(int cash) {
