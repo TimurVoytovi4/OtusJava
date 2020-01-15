@@ -5,7 +5,7 @@ import ru.otus.homework6.Exceptions.NotRecognized;
 
 import java.util.Scanner;
 
-public class Controller {
+public class AtmUserInterface {
     ATM myATM = new MyATM();
     Scanner sc = new Scanner(System.in);
 
