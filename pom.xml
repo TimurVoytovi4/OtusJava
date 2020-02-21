@@ -12,6 +12,7 @@
         <module>L03.1-generics-collections</module>
         <module>L06.1-Annotations-Reflections</module>
         <module>HW6-ATM</module>
+        <module>HW7-Department</module>
     </modules>
 
     <properties>
