@@ -2,6 +2,8 @@ package ru.otus.homework7;
 
 import ru.otus.homework7.Exceptions.AtmException;
 import ru.otus.homework7.Exceptions.NotRecognized;
+import ru.otus.homework7.ATM;
+import ru.otus.homework7.MyATM;
 
 import java.util.Scanner;
 
@@ -9,7 +11,7 @@ public class AtmUserInterface {
     ATM myATM = new MyATM();
     Scanner sc = new Scanner(System.in);
 
-    void begin() {
+    public void start() {
         System.out.println("Укажите операцию введя число: ");
         System.out.println("1. Выдача наличных." + "\t" + "2. Пополнить." + "\n" + "3. Баланс." + "\t" + "4. Завершить.");
         operations(sc.nextInt());
@@ -23,7 +25,7 @@ public class AtmUserInterface {
             } catch (AtmException e) {
                 System.out.println(e.getMessage());
             }
-            begin();
+            start();
         } else if (i == 2) {
             try {
                 System.out.println("Внесите купюру(принимаются номиналы:500, 200, 100, 50): ");
@@ -31,10 +33,10 @@ public class AtmUserInterface {
             } catch (NotRecognized e) {
                 System.out.println(e.getMessage());
             }
-            begin();
+            start();
         } else if (i == 3) {
             System.out.println("Баланс составляет: " + myATM.size());
-            begin();
+            start();
         } else if (i == 4) {
             System.out.println("Всего хорошего :)");
         } else System.out.println("Некорректное значение!");

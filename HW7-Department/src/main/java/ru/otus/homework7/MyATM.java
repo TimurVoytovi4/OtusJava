@@ -47,4 +47,9 @@ public class MyATM implements ATM {
     public int size() {
         return storage.values().stream().flatMap(Collection::stream).mapToInt(Nominal::getTitle).sum();
     }
+
+    @Override
+    public void accept(OperationVisitor op) {
+        op.visit(this);
+    }
 }
