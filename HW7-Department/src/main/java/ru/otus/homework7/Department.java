@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Department {
     private final List<ATM> depAtm;
-    StateOperator stateOperator;
+    private final StateOperator stateOperator = new StateOperator();
 
     public ATM getDepAtm(int i) {
         return depAtm.get(i);
@@ -24,11 +24,10 @@ public class Department {
     }
 
     void saveState(ATM atm) {
-        stateOperator = new StateOperator();
         atm.accept(stateOperator);
     }
 
-    ATM loadState(){
-        return stateOperator.load();
+    void restoreState(MyATM atm){
+         atm.setStorage(stateOperator.load(atm));
     }
 }

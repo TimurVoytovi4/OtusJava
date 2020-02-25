@@ -52,4 +52,8 @@ public class MyATM implements ATM {
     public void accept(OperationVisitor op) {
         op.visit(this);
     }
+
+    public void setStorage(Map<Nominal, List<Nominal>> storage) {
+        this.storage = storage;
+    }
 }

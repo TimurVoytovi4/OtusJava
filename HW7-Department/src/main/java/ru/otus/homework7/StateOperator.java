@@ -3,22 +3,26 @@ package ru.otus.homework7;
 import java.util.*;
 
 public class StateOperator implements OperationVisitor {
-    private AtmSnapshot snapshot;
+    Map<ATM, AtmSnapshot> snapshotMap = new HashMap<>();
+    AtmSnapshot snapshot;
+
     @Override
     public void visit(MyATM atm) {
-        this.snapshot = new AtmSnapshot(
-                atm.fiveHundredsCell,
-                atm.twoHundredsCell,
-                atm.oneHundredsCell,
-                atm.fiftiesCell);
+        snapshot = new AtmSnapshot(
+                new ArrayList<>(atm.fiveHundredsCell),
+                new ArrayList<>(atm.twoHundredsCell),
+                new ArrayList<>(atm.oneHundredsCell),
+                new ArrayList<>(atm.fiftiesCell));
+        snapshotMap.put(atm, snapshot);
     }
 
-    public ATM load() {
-        return snapshot.getStorage();
+    public Map<Nominal, List<Nominal>> load(ATM atm) {
+        return snapshotMap.get(atm).storage;
     }
 
-    static class AtmSnapshot{
+    static class AtmSnapshot {
         private Map<Nominal, List<Nominal>> storage;
+
         public AtmSnapshot(List<Nominal> fiveHundredsCell,
                            List<Nominal> twoHundredsCell,
                            List<Nominal> oneHundredsCell,
@@ -28,10 +32,6 @@ public class StateOperator implements OperationVisitor {
                     twoHundredsCell,
                     oneHundredsCell,
                     fiftiesCell).get(var.ordinal())));
-        }
-
-        public ATM getStorage() {
-            return (MyATM) storage;
         }
     }
 }
