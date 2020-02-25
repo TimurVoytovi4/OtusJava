@@ -5,8 +5,13 @@ import java.util.List;
 
 public class Department {
     private final List<ATM> depAtm;
+    StateOperator stateOperator;
 
-    public Department(MyATM...atm) {
+    public ATM getDepAtm(int i) {
+        return depAtm.get(i);
+    }
+
+    public Department(ATM... atm) {
         this.depAtm = Arrays.asList(atm);
     }
 
@@ -16,5 +21,14 @@ public class Department {
             el.accept(operation);
         }
         return operation.sum;
+    }
+
+    void saveState(ATM atm) {
+        stateOperator = new StateOperator();
+        atm.accept(stateOperator);
+    }
+
+    ATM loadState(){
+        return stateOperator.load();
     }
 }

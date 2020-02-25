@@ -2,13 +2,11 @@ package ru.otus.homework7;
 
 import ru.otus.homework7.Exceptions.AtmException;
 import ru.otus.homework7.Exceptions.NotRecognized;
-import ru.otus.homework7.ATM;
-import ru.otus.homework7.MyATM;
 
 import java.util.Scanner;
 
 public class AtmUserInterface {
-    ATM myATM = new MyATM();
+    Department dep = new Department(new MyATM(), new MyATM());
     Scanner sc = new Scanner(System.in);
 
     public void start() {
@@ -21,7 +19,7 @@ public class AtmUserInterface {
         if (i == 1) {
             System.out.println("Укажите сумму: ");
             try {
-                System.out.println("Вы получите средства следуюшими купюрами: " + myATM.get(sc.nextInt()));
+                System.out.println("Вы получите средства следуюшими купюрами: " + dep.getDepAtm(0).get(sc.nextInt()));
             } catch (AtmException e) {
                 System.out.println(e.getMessage());
             }
@@ -29,13 +27,13 @@ public class AtmUserInterface {
         } else if (i == 2) {
             try {
                 System.out.println("Внесите купюру(принимаются номиналы:500, 200, 100, 50): ");
-                myATM.set(sc.nextInt());
+                dep.getDepAtm(0).set(sc.nextInt());
             } catch (NotRecognized e) {
                 System.out.println(e.getMessage());
             }
             start();
         } else if (i == 3) {
-            System.out.println("Баланс составляет: " + myATM.size());
+            System.out.println("Баланс составляет: " + dep.getDepAtm(0).size());
             start();
         } else if (i == 4) {
             System.out.println("Всего хорошего :)");
