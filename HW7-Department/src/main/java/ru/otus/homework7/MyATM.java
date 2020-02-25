@@ -53,7 +53,7 @@ public class MyATM implements ATM {
         op.visit(this);
     }
 
-    public void setStorage(Map<Nominal, List<Nominal>> storage) {
+    void setStorage(Map<Nominal, List<Nominal>> storage) {
         this.storage = storage;
     }
 }
