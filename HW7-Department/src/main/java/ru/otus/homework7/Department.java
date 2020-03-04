@@ -7,6 +7,7 @@ public class Department {
     private final List<ATM> depAtm;
     private final StateOperator stateOperator = new StateOperator();
 
+
     public ATM getDepAtm(int i) {
         return depAtm.get(i);
     }
@@ -28,6 +29,6 @@ public class Department {
     }
 
     void restoreState(MyATM atm){
-         atm.setStorage(stateOperator.load(atm));
+        atm.setStorage(stateOperator.restore(atm));
     }
 }

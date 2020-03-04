@@ -3,12 +3,11 @@ package ru.otus.homework7;
 import java.util.*;
 
 public class StateOperator implements OperationVisitor {
-    Map<ATM, AtmSnapshot> snapshotMap = new HashMap<>();
-    AtmSnapshot snapshot;
+    private Map<ATM, AtmSnapshot> snapshotMap = new HashMap<>();
 
     @Override
     public void visit(MyATM atm) {
-        snapshot = new AtmSnapshot(
+        AtmSnapshot snapshot = new AtmSnapshot(
                 new ArrayList<>(atm.fiveHundredsCell),
                 new ArrayList<>(atm.twoHundredsCell),
                 new ArrayList<>(atm.oneHundredsCell),
@@ -16,7 +15,7 @@ public class StateOperator implements OperationVisitor {
         snapshotMap.put(atm, snapshot);
     }
 
-    public Map<Nominal, List<Nominal>> load(ATM atm) {
+    public Map<Nominal, List<Nominal>> restore(ATM atm) {
         return snapshotMap.get(atm).storage;
     }
 
